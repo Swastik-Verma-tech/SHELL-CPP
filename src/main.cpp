@@ -44,7 +44,7 @@ int main() {
     }
 
 
-    cout<<cmd1<<": command not found\n";
+    // cout<<cmd1<<": command not found\n";
    
   }
 
