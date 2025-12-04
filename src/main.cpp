@@ -12,4 +12,12 @@ int main() {
   string cmd;
   getline(cin,cmd);
   cout<<cmd<<": command not found\n";
+
+  cout<<"$ ";
+  while(true){
+    string cmd1;
+    getline(cin,cmd1);
+    cout<<cmd1<<": command not found\n";
+    cout<<"$ ";  
+  }
 }
