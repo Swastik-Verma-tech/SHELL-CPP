@@ -55,7 +55,7 @@ int main() {
             int result = stat(required_path.c_str(), &info);
             if(!result){
               //
-              if(info.st_mode & _S_IEXEC){
+              if(info.st_mode & S_IEXEC){
                 cout<<cmd1.substr(5)<<" is "<<required_path<<"\n";
                 break;
               }
