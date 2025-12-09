@@ -61,8 +61,8 @@ int main() {
       else if(word=="exit"){
         cout<<"exit is a shell builtin\n";
       }
-      else if(word=="type"){
-        cout<<"type is a shell builtin\n";
+      else if(word=="type" || word=="pwd"){
+        cout<<word<<" is a shell builtin\n";
       }
       else{
         string file_name=cmd1.substr(5);
