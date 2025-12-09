@@ -53,7 +53,7 @@ int main() {
       continue;
     }
 
-    else if(word=="type"){
+    else if(word=="type"){           
       ss>>word;
       if(word=="echo"){
         cout<<"echo is a shell builtin\n";
@@ -95,6 +95,10 @@ int main() {
       }
     }
 
+    else if(word == "pwd"){
+      cout<<fs::current_path()<<"\n";
+    }
+
     else{
       vector<string> argument=splitter(cmd1,' ');
       vector<char*> exec_argument = converter(argument);
@@ -108,6 +112,7 @@ int main() {
           vector<char*> exec_argument=converter(argument);
           execvp(argument[0].c_str(),exec_argument.data());  
           
+          //this you have to print as a error message
           cout << cmd1 << ": command not found\n";
           exit(1);
       }
