@@ -102,7 +102,7 @@ int main() {
     else if(word == "cd"){
       string temp_directory=cmd1.substr(3);
       fs::current_path(temp_directory);
-      cout<<"cd: "<<perror("Error");
+      perror("Error");
     }
 
     else{
