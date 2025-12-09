@@ -96,7 +96,7 @@ int main() {
     }
 
     else if(word == "pwd"){
-      cout<<fs::current_path()<<"\n";
+      cout<<fs::current_path().string()<<"\n";
     }
 
     else{
