@@ -5,7 +5,7 @@
 using namespace std;
 namespace fs = filesystem;
 
-string quotes_splitter(string &str){
+string quotes_splitter(string_view &str){
     string final ="";
     bool in_quotes=false;
     string temp="";
