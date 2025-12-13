@@ -77,6 +77,9 @@ vector<string> quotes_splitter(string &str){
                         }
                     }
                 }
+                else temp+=str[c];
+
+                
             }
         }
         // if(str[c]=='\\' && !in_quotes){
