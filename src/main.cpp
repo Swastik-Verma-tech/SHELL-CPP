@@ -12,13 +12,38 @@ vector<string> quotes_splitter(string &str){
     int num=0;
     for(int c=0;c<str.length();c++){
         // cout<<c;
-        if(str[c]=='\\' && !in_quotes){
+        if(str[c]=='\\'){
             if(c==str.length()-1) temp+=str[c];
-            else{
+            if(!in_quotes){
                 c++;
                 temp+=str[c];
             }
+            else if(in_quotes && num==2){
+                if(str[c+1]=='$' || str[c+1]=='`' || str=='\"'){
+                    c++;
+                    temp+=str[c];
+                }
+                else if(str[c+1]=='\\'){
+                    if(c+2<str.length()){
+                        if(str[c+2]=='n'){
+                            c+=2;
+                            temp+="\n";
+                        }
+                        else{
+                            c++;
+                            temp+=str[c];
+                        }
+                    }
+                }
+            }
         }
+        // if(str[c]=='\\' && !in_quotes){
+        //     if(c==str.length()-1) temp+=str[c];
+        //     else{
+        //         c++;
+        //         temp+=str[c];
+        //     }
+        // }
         else if(str[c]=='\'' || str[c]=='\"'){
             if(in_quotes==false){
               in_quotes=true;
@@ -44,6 +69,7 @@ vector<string> quotes_splitter(string &str){
     if(temp!="") final.push_back(temp);
     return final;
 }
+
 
 //function to splite a string about ':'
 vector<string> splitter(string &str,char s){
