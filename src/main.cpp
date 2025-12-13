@@ -45,6 +45,73 @@ vector<string> quotes_splitter(string &str){
     return final;
 }
 
+/*
+vector<string> quotes_splitter(string &str){
+    vector<string> final;
+    bool in_quotes=false;
+    string temp="";
+    int num=0;
+    for(int c=0;c<str.length();c++){
+        // cout<<c;
+        if(str[c]=='\\'){
+            if(c==str.length()-1) temp+=str[c];
+            if(!in_quotes){
+                c++;
+                temp+=str[c];
+            }
+            else if(in_quotes && num==2){
+                if(str[c+1]=='$' || str[c+1]=='`' || str=='\"'){
+                    c++;
+                    temp+=str[c];
+                }
+                else if(str[c+1]=='\\'){
+                    if(c+2<str.length()){
+                        if(str[c+2]=='n'){
+                            c+=2;
+                            temp+="\n";
+                        }
+                        else{
+                            c++;
+                            temp+=str[c];
+                        }
+                    }
+                }
+            }
+        }
+        // if(str[c]=='\\' && !in_quotes){
+        //     if(c==str.length()-1) temp+=str[c];
+        //     else{
+        //         c++;
+        //         temp+=str[c];
+        //     }
+        // }
+        else if(str[c]=='\'' || str[c]=='\"'){
+            if(in_quotes==false){
+              in_quotes=true;
+              if(str[c]=='\'') num=1;
+              else num=2;
+            } 
+            else{
+              if((num==1 && c=='\'') || (num==2 && c=='\"')) in_quotes=false;
+              else temp+=str[c]; //if(num==2 && c=='\'') temp+=c; 
+            }
+        }
+        else if(str[c]==' ' && !in_quotes){
+            if(temp!=""){
+                final.push_back(temp);
+                // final" ";
+                temp="";
+            }
+        }
+        else{
+            temp+=str[c];
+        }
+    }
+    if(temp!="") final.push_back(temp);
+    return final;
+}
+*/
+
 //function to splite a string about ':'
 vector<string> splitter(string &str,char s){
   vector<string> ans;
