@@ -19,7 +19,7 @@ vector<string> quotes_splitter(string &str){
                 temp+=str[c];
             }
             else if(in_quotes && num==2){
-                if(str[c+1]=='$' || str[c+1]=='`' || str=='\"'){
+                if(str[c+1]=='$' || str[c+1]=='`' || str[c+1]=='\"'){
                     c++;
                     temp+=str[c];
                 }
