@@ -252,9 +252,9 @@ int main() {
       fout<<output_final;
       fout.close();
     }
-    else{
-      cout<<output_final;
-    }
+    // else{
+    //   cout<<output_final;
+    // }
    
   }
 
