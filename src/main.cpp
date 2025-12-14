@@ -113,7 +113,7 @@ int main() {
     getline(cin,cmd1);
     ofstream fout;
     auto idx=cmd1.find('>');
-    if(idx!=npos){
+    if(idx!=string::npos){
       string file_name=cmd1.substr(idx+2);
       fout.open(file_name);
       cmd1=cmd1.substr(0,idx-1);
@@ -248,7 +248,7 @@ int main() {
     // what i have got in output_final is something that i have to store if i got > in input
     // cout<<output_final;
     
-    if(idx!=npos){
+    if(idx!=string::npos){
       fout<<output_final;
       fout.close();
     }
