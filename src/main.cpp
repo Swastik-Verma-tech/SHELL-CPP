@@ -122,9 +122,9 @@ int main() {
       file_name=cmd1.substr(idx+2);
       cmd1=cmd1.substr(0,idx-1);
 
-      // auto fd_required=open(file_name.c_str(), O_WRONLY | O_CREAT | O_TRUNC,0644);
-      // dup2(fd_required,1);
-      // close(fd_required);
+      auto fd_required=open(file_name.c_str(), O_WRONLY | O_CREAT | O_TRUNC,0644);
+      dup2(fd_required,1);
+      close(fd_required);
     }
 
     stringstream ss(cmd1);
