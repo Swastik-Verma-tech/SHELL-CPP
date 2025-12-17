@@ -48,13 +48,12 @@ vector<string> quotes_splitter(string &str){
             } 
             else{
               if((num==1 && str[c]=='\'') || (num==2 && str[c]=='\"')) in_quotes=false;
-              else temp+=str[c]; //if(num==2 && c=='\'') temp+=c; 
+              else temp+=str[c]; 
             }
         }
         else if(str[c]==' ' && !in_quotes){
             if(temp!=""){
                 final.push_back(temp);
-                // final" ";
                 temp="";
             }
         }
@@ -111,13 +110,6 @@ int main() {
     output_final="";
     string cmd1;
     getline(cin,cmd1);
-    ofstream fout;
-    auto idx=cmd1.find('>');
-    if(idx!=string::npos){
-      string file_name=cmd1.substr(idx+2);
-      fout.open(file_name);
-      cmd1=cmd1.substr(0,idx-1);
-    }
     stringstream ss(cmd1);
     string word;
     ss>>word;
@@ -128,28 +120,22 @@ int main() {
       if(cmd1.length()>5){
         string abc = cmd1.substr(5);
         for(auto v: quotes_splitter(abc)){
-          // cout<<v<<" ";
-          output_final+=(v+" ");
-        }
-        // cout<<quotes_splitter(abc);
+          cout<<v<<" ";
+        } 
       }
-      // cout<<"\n";
-      output_final+="\n";
+      cout<<"\n";
     }
 
     else if(word=="type"){           
       ss>>word;
       if(word=="echo"){
-        // cout<<"echo is a shell builtin\n";
-        output_final+="echo is a shell builtin\n";
+        cout<<"echo is a shell builtin\n";
       }
       else if(word=="exit"){
-        // cout<<"exit is a shell builtin\n";
-        output_final+="exit is a shell builtin\n";
+        cout<<"exit is a shell builtin\n";
       }
       else if(word=="type" || word=="pwd" || word == "cd"){
-        // cout<<word<<" is a shell builtin\n";
-        output_final+=(word+" is a shell builting\n");
+        cout<<word<<" is a shell builtin\n";
       }
       else{
         string file_name=cmd1.substr(5);
@@ -168,8 +154,7 @@ int main() {
             bool isExecutable = (p & fs::perms::owner_exec) != fs::perms::none;
 
             if(isExecutable){
-              // cout<<file_name<<" is "<<new_path<<"\n";
-              output_final+= file_name+" is "+new_path;
+              cout<<file_name<<" is "<<new_path<<"\n";
               file_done=true;
               break;
             }
@@ -182,8 +167,7 @@ int main() {
     }
 
     else if(word == "pwd"){
-      // cout<<fs::current_path().string()<<"\n";
-      output_final+=fs::current_path().string()+"\n";
+      cout<<fs::current_path().string()<<"\n";
     }
 
     else if(word == "cd"){
@@ -241,23 +225,6 @@ int main() {
       else{
           wait(NULL);
       }
-
-
-    }
-    
-    // what i have got in output_final is something that i have to store if i got > in input
-    // cout<<output_final;
-    
-    if(idx!=string::npos){
-      fout<<output_final;
-      fout.close();
-    }
-    // else{
-    //   cout<<output_final;
-    // }
-   
+    }   
   }
-
-
-
 }
