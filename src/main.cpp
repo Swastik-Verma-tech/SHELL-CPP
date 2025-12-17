@@ -115,6 +115,7 @@ int main() {
     string cmd1;
     getline(cin,cmd1);
     string file_name;
+    int saved_stdout;
 
     auto idx=cmd1.find('>');
 
@@ -122,6 +123,7 @@ int main() {
       file_name=cmd1.substr(idx+2);
       cmd1=cmd1.substr(0,idx-1);
 
+      saved_stdout=dup(1);
       auto fd_required=open(file_name.c_str(), O_WRONLY | O_CREAT | O_TRUNC,0644);
       dup2(fd_required,1);
       close(fd_required);
@@ -231,16 +233,7 @@ int main() {
       if(c<0){
           cout<<"Fork failed! (system failed)\n";
       }
-      else if(c==0){
-
-
-      
-        if(idx!=string::npos){
-          auto fd_required=open(file_name.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-          dup2(fd_required,1);
-          close(fd_required);
-        }
-
+      else if(c==0){   
         //   vector<char*> exec_argument=converter(argument);
           execvp(argument[0].c_str(),exec_argument.data());  
           
@@ -251,6 +244,8 @@ int main() {
       else{
           wait(NULL);
       }
-    }   
+    }      
+    dup2(saved_stdout,1);
+    close(saved_stdout);
   }
 }
