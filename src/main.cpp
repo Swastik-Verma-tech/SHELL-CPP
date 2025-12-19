@@ -136,61 +136,138 @@ vector<char*> converter(vector<string>& vec){
     return argv;
 }
 
+// string read_input(){
+//   string input="";
+//   string temp="";
+//   vector<string> prefix=listof_files;//{"ex","exi","ec","ech","t","ty","typ","c","p","pw"};
+//   // vector<string> print={"it","t","ho","o","ype","pe","e","d","wd","d"};
+  
+//   while(true){
+//       int c = getchar();
+//       if(c==127){   // backspace ascii is 127
+//         if(input!=""){
+//           cout<<"\b \b";
+//           if(input!="") input=input.erase(input.size()-1,1);
+//           if(temp!=""){
+//               temp=temp.erase(temp.size()-1,1);
+//           }
+//         }
+//       }
+//       else if(c==10){  //break by pressing enter
+//         cout<<"\n";
+//         return input;
+//       }
+//       else if(c==9){ // vertical tab
+//           if(temp!=""){
+//             string temp_str="";
+//             for(auto v:listof_files){
+//                 string t=v.substr(0,temp.size());
+//                 if(t==temp){
+//                     temp_str=v.substr(temp.size());
+//                     break;
+//                 }
+//             }
+//             if(temp_str!=""){
+//               cout<<temp_str<<" ";
+//               input+=(temp_str+" ");
+//               temp="";
+//             }
+//             else{
+//               cout<<"\x07";
+//             }
+//           } 
+//           continue;
+//       }
+//       else{
+//           input+=char(c);
+//           if(c==32){
+//               temp="";
+//           }
+//           else temp+=char(c);
+//           cout<<char(c);
+//       }
+//       cout.flush();
+//   }
+
+//   return input; 
+// }
+
+
 string read_input(){
   string input="";
   string temp="";
   vector<string> prefix=listof_files;//{"ex","exi","ec","ech","t","ty","typ","c","p","pw"};
-  // vector<string> print={"it","t","ho","o","ype","pe","e","d","wd","d"};
-  
-  while(true){
-      int c = getchar();
-      if(c==127){   // backspace ascii is 127
-        if(input!=""){
-          cout<<"\b \b";
-          if(input!="") input=input.erase(input.size()-1,1);
-          if(temp!=""){
-              temp=temp.erase(temp.size()-1,1);
-          }
+  bool previous_tab=0;
+    
+    while(true){
+        vector<string> all_executables;
+        int c = getchar();
+        if(previous_tab && c==9){
+            cout<<"\n";
+            for(auto v:all_executables){
+                cout<<v<<"  ";
+            }
+            cout<<"\n"<<input;
+            previous_tab=0;
         }
-      }
-      else if(c==10){  //break by pressing enter
-        cout<<"\n";
-        return input;
-      }
-      else if(c==9){ // vertical tab
-          if(temp!=""){
-            string temp_str="";
-            for(auto v:listof_files){
-                string t=v.substr(0,temp.size());
-                if(t==temp){
-                    temp_str=v.substr(temp.size());
-                    break;
+        else if(c==127){   // backspace ascii is 127
+            if(input!=""){
+                cout<<"\b \b";
+                input=input.erase(input.size()-1,1);
+                if(temp!=""){
+                    temp=temp.erase(temp.size()-1,1);
                 }
             }
-            if(temp_str!=""){
-              cout<<temp_str<<" ";
-              input+=(temp_str+" ");
-              temp="";
+      
+        }
+        else if(c==10){  //break by pressing enter
+            cout<<"\n";
+            return input;
+        }
+        else if(c==9){ // vertical tab
+        
+            if(temp!=""){
+                all_executables.clear();
+                string temp_str="";
+                for(auto v:listof_files){
+                    string t="";
+                    if(temp.size() <= v.size()) t=v.substr(0,temp.size());
+                    if(t==temp){
+                        temp_str=v.substr(temp.size());
+                        all_executables.push_back(v);
+                    }
+                }
+                
+                if(all_executables.size()==1){
+                    cout<<temp_str<<" ";
+                    input+=(temp_str+" ");
+                    temp="";
+                }
+                else if(all_executables.size()>1){
+                    sort(all_executables.begin(),all_executables.end());
+                    cout<<"\x07";
+                    previous_tab=1;
+                }
+                else{
+                    cout<<"\x07";
+                }
+            } 
+            continue;
+        }
+        else{
+            input+=char(c);
+            if(c==32){
+                temp="";
             }
-            else{
-              cout<<"\x07";
-            }
-          } 
-          continue;
-      }
-      else{
-          input+=char(c);
-          if(c==32){
-              temp="";
-          }
-          else temp+=char(c);
-          cout<<char(c);
-      }
-      cout.flush();
-  }
+            else temp+=char(c);
+            cout<<char(c);
+        }
+        cout.flush();
+    }
 
-  return input; 
+    return input; 
 }
+
 
 
 
