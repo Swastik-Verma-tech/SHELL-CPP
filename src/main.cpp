@@ -198,9 +198,9 @@ string read_input(){
   string temp="";
   vector<string> prefix=listof_files;//{"ex","exi","ec","ech","t","ty","typ","c","p","pw"};
   bool previous_tab=0;
+  vector<string> all_executables;
     
     while(true){
-        vector<string> all_executables;
         int c = getchar();
         if(previous_tab && c==9){
             cout<<"\n";
@@ -210,6 +210,7 @@ string read_input(){
             cout<<"\n"<<input;
             previous_tab=0;
         }
+        
         else if(c==127){   // backspace ascii is 127
             if(input!=""){
                 cout<<"\b \b";
@@ -218,6 +219,7 @@ string read_input(){
                     temp=temp.erase(temp.size()-1,1);
                 }
             }
+            previous_tab=0;
       
         }
         else if(c==10){  //break by pressing enter
@@ -261,6 +263,7 @@ string read_input(){
             }
             else temp+=char(c);
             cout<<char(c);
+            previous_tab=0;
         }
         cout.flush();
     }
