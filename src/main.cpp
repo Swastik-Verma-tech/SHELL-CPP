@@ -124,6 +124,12 @@ void populate_(){
   listof_files.push_back("cd");
   listof_files.push_back("type");
   listof_files.push_back("exit");
+
+
+  //actually we need to do some more things on the listof_files array as it may contain duplicate due so different each_path may contain the same files so that is why from it we will have to remove the duplicate so that is what we gonna do just below
+  sort(listof_files.begin(),listof_files.end());
+  auto last=unique(listof_files.begin(),listof_files.end()); // do remember what this unique function does
+  listof_files.erase(last,listof_files.end());
 }
 
 vector<char*> converter(vector<string>& vec){
@@ -135,62 +141,6 @@ vector<char*> converter(vector<string>& vec){
     
     return argv;
 }
-
-// string read_input(){
-//   string input="";
-//   string temp="";
-//   vector<string> prefix=listof_files;//{"ex","exi","ec","ech","t","ty","typ","c","p","pw"};
-//   // vector<string> print={"it","t","ho","o","ype","pe","e","d","wd","d"};
-  
-//   while(true){
-//       int c = getchar();
-//       if(c==127){   // backspace ascii is 127
-//         if(input!=""){
-//           cout<<"\b \b";
-//           if(input!="") input=input.erase(input.size()-1,1);
-//           if(temp!=""){
-//               temp=temp.erase(temp.size()-1,1);
-//           }
-//         }
-//       }
-//       else if(c==10){  //break by pressing enter
-//         cout<<"\n";
-//         return input;
-//       }
-//       else if(c==9){ // vertical tab
-//           if(temp!=""){
-//             string temp_str="";
-//             for(auto v:listof_files){
-//                 string t=v.substr(0,temp.size());
-//                 if(t==temp){
-//                     temp_str=v.substr(temp.size());
-//                     break;
-//                 }
-//             }
-//             if(temp_str!=""){
-//               cout<<temp_str<<" ";
-//               input+=(temp_str+" ");
-//               temp="";
-//             }
-//             else{
-//               cout<<"\x07";
-//             }
-//           } 
-//           continue;
-//       }
-//       else{
-//           input+=char(c);
-//           if(c==32){
-//               temp="";
-//           }
-//           else temp+=char(c);
-//           cout<<char(c);
-//       }
-//       cout.flush();
-//   }
-
-//   return input; 
-// }
 
 
 string read_input(){
