@@ -5,6 +5,24 @@
 # include <sys/wait.h>
 # include<fcntl.h>
 # include<unistd.h>
+# include<termios.h>
+
+struct termios information;
+
+void enableRawMode(){
+    tcgetattr(STDIN_FILENO, &information);
+    
+    struct termios raw=information;
+    
+    raw.c_lflag &= ~(ICANON | ECHO);
+    
+    tcsetattr(STDIN_FILENO, TCSANOW, &raw);
+}
+
+void disableRawMode(){
+    tcsetattr(STDIN_FILENO, TCSANOW, &information);
+}
+
 
 using namespace std;
 namespace fs = filesystem;
@@ -99,6 +117,52 @@ vector<char*> converter(vector<string>& vec){
     return argv;
 }
 
+string read_input(){
+  string input="";
+  string temp="";
+  vector<string> prefix={"ex","exi","ec","ech"};
+  vector<string> print={"it","t","ho","o"};
+  
+  while(true){
+      int c = getchar();
+      if(c==127){   // backspace ascii is 127
+        if(input!=""){
+          cout<<"\b \b";
+          if(input!="") input=input.erase(input.size()-1,1);
+          if(temp!=""){
+              temp=temp.erase(temp.size()-1,1);
+          }
+        }
+      }
+      else if(c==10){  //break by pressing enter
+        cout<<"\n";
+        return input;
+      }
+      else if(c==9){ // vertical tab
+          if(temp!=""){
+              auto it = find(prefix.begin(),prefix.end(),temp); 
+              if (it!=prefix.end()){
+                  cout<<print[it-prefix.begin()]<<" ";
+                  input+=(print[it-prefix.begin()]+" ");
+                  temp="";
+              }
+          } 
+          continue;
+      }
+      else{
+          input+=char(c);
+          if(c==32){
+              temp="";
+          }
+          else temp+=char(c);
+          cout<<char(c);
+      }
+      cout.flush();
+  }
+
+  return input; 
+}
+
 
 
 
@@ -110,12 +174,17 @@ int main() {
 
   // i had to write the command not found until user doesn't stop
   while(true){
+    enableRawMode();
     cout<<"$ ";
     // output_final="";
     string cmd1;
-    getline(cin,cmd1);
+
+    cmd1 = read_input();
+
+    // getline(cin,cmd1);
     string file_name;
-    int saved_stdout;
+    int saved_stdout=-1;
+    bool redirection_active=false;
     int temp_fd;
 
     auto idx=cmd1.find('>');
@@ -144,6 +213,7 @@ int main() {
       cmd1=cmd1.substr(0,idx-1);
       dup2(fd_required,temp_fd);
       close(fd_required);
+      redirection_active=true;
     }
 
     stringstream ss(cmd1);
@@ -261,8 +331,14 @@ int main() {
       else{
           wait(NULL);
       }
-    }      
-    dup2(saved_stdout,temp_fd);
-    close(saved_stdout);
+    }  
+    if(redirection_active){
+      dup2(saved_stdout,temp_fd);
+      close(saved_stdout);
+    }    
   }
+
+
+  disableRawMode();
+  return 0;
 }
