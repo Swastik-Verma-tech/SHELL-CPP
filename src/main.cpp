@@ -143,6 +143,100 @@ vector<char*> converter(vector<string>& vec){
 }
 
 
+// string read_input(){
+//   string input="";
+//   string temp="";
+//   vector<string> prefix=listof_files;//{"ex","exi","ec","ech","t","ty","typ","c","p","pw"};
+//   bool previous_tab=0;
+//   vector<string> all_executables;
+    
+//     while(true){
+//         int c = getchar();
+//         if(previous_tab && c==9){
+//             cout<<"\n";
+//             for(auto v:all_executables){
+//                 cout<<v<<"  ";
+//             }
+//             cout<<"\n$ "<<input;
+//             previous_tab=0;
+//         }
+        
+//         else if(c==127){   // backspace ascii is 127
+//             if(input!=""){
+//                 cout<<"\b \b";
+//                 input=input.erase(input.size()-1,1);
+//                 if(temp!=""){
+//                     temp=temp.erase(temp.size()-1,1);
+//                 }
+//             }
+//             previous_tab=0;
+      
+//         }
+//         else if(c==10){  //break by pressing enter
+//             cout<<"\n";
+//             return input;
+//         }
+//         else if(c==9){ // vertical tab
+        
+//             if(temp!=""){
+//                 all_executables.clear();
+//                 string temp_str="";
+//                 for(auto v:listof_files){
+//                     string t="";
+//                     if(temp.size() <= v.size()) t=v.substr(0,temp.size());
+//                     if(t==temp){
+//                         temp_str=v.substr(temp.size());
+//                         all_executables.push_back(v);
+//                     }
+//                 }
+                
+//                 if(all_executables.size()==1){
+//                     cout<<temp_str<<" ";
+//                     input+=(temp_str+" ");
+//                     temp="";
+//                 }
+//                 else if(all_executables.size()>1){
+//                     sort(all_executables.begin(),all_executables.end());
+//                     cout<<"\x07";
+//                     previous_tab=1;
+//                 }
+//                 else{
+//                     cout<<"\x07";
+//                 }
+//             } 
+//             continue;
+//         }
+//         else{
+//             input+=char(c);
+//             if(c==32){
+//                 temp="";
+//             }
+//             else temp+=char(c);
+//             cout<<char(c);
+//             previous_tab=0;
+//         }
+//         cout.flush();
+//     }
+
+//     return input; 
+// }
+
+
+string lcp="";
+void lcp_(string str){
+    if(lcp=="") lcp=str;
+    else{
+        string temp_="";
+        for(int i=0;i<min(lcp.length(),str.length());i++){
+            if(lcp[i]==str[i]){
+                temp_+=lcp[i];
+            }
+            else break;
+        }
+        lcp=temp_;
+    }
+}
+
 string read_input(){
   string input="";
   string temp="";
@@ -177,16 +271,19 @@ string read_input(){
             return input;
         }
         else if(c==9){ // vertical tab
-        
+            
             if(temp!=""){
                 all_executables.clear();
+                lcp="";
                 string temp_str="";
                 for(auto v:listof_files){
                     string t="";
                     if(temp.size() <= v.size()) t=v.substr(0,temp.size());
                     if(t==temp){
                         temp_str=v.substr(temp.size());
+                        // cout<<v;
                         all_executables.push_back(v);
+                        lcp_(v);
                     }
                 }
                 
@@ -196,9 +293,19 @@ string read_input(){
                     temp="";
                 }
                 else if(all_executables.size()>1){
-                    sort(all_executables.begin(),all_executables.end());
-                    cout<<"\x07";
-                    previous_tab=1;
+          
+                    string temp_str1="";
+                    if(temp.size()<lcp.size()) temp_str1=lcp.substr(temp.size());
+                    if(temp_str1==""){
+                        sort(all_executables.begin(),all_executables.end());
+                        cout<<"\x07";
+                        previous_tab=1;
+                    }
+                    else{
+                        cout<<temp_str1;
+                        input+=(temp_str1);
+                        temp+=temp_str1;
+                    }
                 }
                 else{
                     cout<<"\x07";
@@ -220,6 +327,9 @@ string read_input(){
 
     return input; 
 }
+
+
+
 
 
 
