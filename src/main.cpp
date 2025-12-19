@@ -87,25 +87,44 @@ vector<string> quotes_splitter(string &str){
     return final;
 }
 
+
+
 //function to splite a string about ':'
 vector<string> splitter(string &str,char s){
   vector<string> ans;
   size_t start=0;
   size_t end=str.find(s);
   while(end!=-1){
-      ans.push_back(str.substr(start,end-start));
+    ans.push_back(str.substr(start,end-start));
     // // here i am using the string_view instead of substr and reason you can know
     //   ans.push_back(string_view(start,end-start));
-      start=end+1;
-      end=str.find(s,start);
+    start=end+1;
+    end=str.find(s,start);
   }
   ans.push_back(str.substr(start));
-//   ans.push_back(string_view(start));
+  //   ans.push_back(string_view(start));
   return ans;
 }
 
 string path=getenv("PATH");
 vector<string> directry=splitter(path,':');
+
+// for autocompletion we are maintaining all these files present in the directory in paths
+vector<string> listof_files;
+
+//function used to populate the listof_files vector 
+void populate_(){
+  for(auto each_path:directry){
+      if(fs::exists(each_path)){
+          for(const auto & each_file : fs::directory_iterator(each_path)){
+              listof_files.push_back(each_file.path().filename().string());
+          }
+      }
+  }
+  listof_files.push_back("cd");
+  listof_files.push_back("type");
+  listof_files.push_back("exit");
+}
 
 vector<char*> converter(vector<string>& vec){
     vector<char*> argv;
@@ -120,8 +139,8 @@ vector<char*> converter(vector<string>& vec){
 string read_input(){
   string input="";
   string temp="";
-  vector<string> prefix={"ex","exi","ec","ech","t","ty","typ","c","p","pw"};
-  vector<string> print={"it","t","ho","o","ype","pe","e","d","wd","d"};
+  vector<string> prefix=listof_files;//{"ex","exi","ec","ech","t","ty","typ","c","p","pw"};
+  // vector<string> print={"it","t","ho","o","ype","pe","e","d","wd","d"};
   
   while(true){
       int c = getchar();
@@ -140,15 +159,22 @@ string read_input(){
       }
       else if(c==9){ // vertical tab
           if(temp!=""){
-              auto it = find(prefix.begin(),prefix.end(),temp); 
-              if (it!=prefix.end()){
-                  cout<<print[it-prefix.begin()]<<" ";
-                  input+=(print[it-prefix.begin()]+" ");
-                  temp="";
-              }
-              else{
-                cout<<"\x07";
-              }
+            string temp_str="";
+            for(auto v:listof_files){
+                string t=v.substr(0,temp.size());
+                if(t==temp){
+                    temp_str=v.substr(temp.size());
+                    break;
+                }
+            }
+            if(temp_str!=""){
+              cout<<temp_str<<" ";
+              input+=(temp_str+" ");
+              temp="";
+            }
+            else{
+              cout<<"\x07";
+            }
           } 
           continue;
       }
@@ -179,7 +205,7 @@ int main() {
   while(true){
     enableRawMode();
     cout<<"$ ";
-    // output_final="";
+    populate_();
     string cmd1;
 
     cmd1 = read_input();
