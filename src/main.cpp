@@ -376,6 +376,8 @@ int main() {
         // DO REMEMBER YOU HAVE TO WRITE THE wait(NULL) command 2 times as there above 2 child's processes need to be closed
         wait(NULL);
         wait(NULL); 
+       
+        continue;
     }
 
     else if(cmd1=="exit") break; // implementing the exit builtin
