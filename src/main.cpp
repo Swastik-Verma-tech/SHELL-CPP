@@ -342,6 +342,7 @@ int main() {
             int saved_out=dup(1);
             dup2(fd[1],1);   // why we are writing the fd[1] as we will be writing to the write end of it
             close(fd[1]);
+            close(fd[0]);
             execvp(args_path1_[0],args_path1_.data());
             dup2(saved_out,1);
             close(saved_out);
@@ -360,6 +361,7 @@ int main() {
             int saved_out = dup(0);
             dup2(fd[0],0);
             close(fd[0]);
+            close(fd[1]);
             execvp(args_path2_[0],args_path2_.data());
             dup2(saved_out,0);
             close(saved_out);
@@ -376,8 +378,7 @@ int main() {
         // DO REMEMBER YOU HAVE TO WRITE THE wait(NULL) command 2 times as there above 2 child's processes need to be closed
         wait(NULL);
         wait(NULL); 
-       
-        continue;
+      
     }
 
     else if(cmd1=="exit") break; // implementing the exit builtin
