@@ -271,8 +271,7 @@ int main() {
     cmd1 = read_input(); 
     disableRawMode();
 
-    vector<string> argument=quotes_splitter(cmd1);
-
+    
     // getline(cin,cmd1);
     string file_name;
     int saved_stdout=-1;
@@ -281,8 +280,8 @@ int main() {
     stringstream ss(cmd1);
     string word;
     ss>>word;
-
-
+    
+    
     
     if(cmd1.find('>') != string::npos){
       int idx=cmd1.find('>');
@@ -312,6 +311,7 @@ int main() {
       redirection_active=true;
     }
     
+    vector<string> argument=quotes_splitter(cmd1);
     
     int idx_ = cmd1.find('|');
     if(idx_ != string::npos   && idx_>=1 && (idx_+2)<cmd1.length()){
