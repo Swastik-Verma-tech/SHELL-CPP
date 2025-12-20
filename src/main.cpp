@@ -279,14 +279,19 @@ int main() {
 
 
     int idx_ = cmd1.find('|');
-    if(idx_ != string::npos){
-        auto it = find(argument.begin(),argument.end(),"|");
-        it--;
-        string path1_=argument[it-argument.begin()];
-        char* args_path1_[] = {(char*)path1_.c_str(), NULL};
-        it+=2;
-        string path2_=argument[it-argument.begin()];
-        char* args_path2_[] = {(char*)path2_.c_str(), NULL};
+    if(idx_ != string::npos   && idx_>=1 && (idx_+2)<cmd1.length()){
+        string path1_="";
+        string path2_="";
+        path1_=cmd1.substr(0,idx_-1);
+    
+        path2_=cmd1.substr(idx_+2);
+       
+        vector<string> args1_=quotes_splitter(path1_);
+        vector<char*> args_path1_ = converter(args1_);
+
+        vector<string> args2_=quotes_splitter(path2_);
+        vector<char*> args_path2_ = converter(args2_);
+        
         int fd[2];
         pipe(fd);
         
@@ -298,11 +303,11 @@ int main() {
             cout<<"Fork failed\n";
         }
         else if(c==0){
-            cout<<"Fork done\n";
+            // cout<<"Fork done\n";
             int saved_out=dup(1);
             dup2(fd[1],1);   // why we are writing the fd[1] as we will be writing to the write end of it
             close(fd[1]);
-            execvp(path1_.c_str(),args_path1_);
+            execvp(args_path1_[0],args_path1_.data());
             dup2(saved_out,1);
             close(saved_out);
             //this you have to print as a error message
@@ -316,11 +321,11 @@ int main() {
             cout<<"Fork failed\n";
         }
         else if(c1==0){
-            cout<<"Fork done\n";
+            // cout<<"Fork done\n";
             int saved_out = dup(0);
             dup2(fd[0],0);
             close(fd[0]);
-            execvp(path2_.c_str(),args_path2_);
+            execvp(args_path2_[0],args_path2_.data());
             dup2(saved_out,0);
             close(saved_out);
             
@@ -338,9 +343,8 @@ int main() {
         wait(NULL); 
     }
 
-    auto idx=cmd1.find('>');
-
-    if(idx!=string::npos){
+    else if(cmd1.find('>') != string::npos){
+      int idx=cmd1.find('>');
       
       if(cmd1[idx-1]=='2'){
         temp_fd=2;        
@@ -463,7 +467,7 @@ int main() {
     }
 
     else{
-      // vector<string> argument=quotes_splitter(cmd1);
+      // vector<string> argument=quotes_splitter(cmd1);   // actually this line i have implemented above where i am reading cmd1
       vector<char*> exec_argument = converter(argument);
 
       pid_t c=fork();
@@ -472,7 +476,7 @@ int main() {
           cout<<"Fork failed! (system failed)\n";
       }
       else if(c==0){   
-        //   vector<char*> exec_argument=converter(argument);
+          
           execvp(argument[0].c_str(),exec_argument.data());  
           
           //this you have to print as a error message
