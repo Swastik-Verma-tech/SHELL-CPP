@@ -249,9 +249,8 @@ string read_input(){
 }
 
 bool builtin_execute(string cmd1){
-    stringstream ss;
+    stringstream ss(cmd1);
     string word;
-    ss(cmd1);
     ss>>word;
     
     // if(cmd1 == "exit") break; ye on the spot lagaana pdega
@@ -492,7 +491,7 @@ int main() {
     /*
     Below using this builtin_execute function i am executing the other commands of cmd1
     */
-   
+
     else if(!builtin_execute(cmd1)){
       // vector<string> argument=quotes_splitter(cmd1);   // actually this line i have implemented above where i am reading cmd1
       vector<char*> exec_argument = converter(argument);
