@@ -383,7 +383,7 @@ int main() {
   populate_();
   // i had to write the command not found until user doesn't stop
   while(true){
-    cout<<"$ ";
+    // cout<<"$ ";
     string cmd1;
     
     // enableRawMode();
@@ -392,11 +392,12 @@ int main() {
 
     char* unmodified_cmd=readline("$ ");
     
+    // it is implementing the ctrl+D command of shell
     if(!unmodified_cmd) break;
     
     cmd1=string(unmodified_cmd);
 
-    History_tracker.push_back(cmd1);
+    if(cmd1.length() > 0) History_tracker.push_back(cmd1);
     // getline(cin,cmd1);
     string file_name;
     int saved_stdout=-1;
