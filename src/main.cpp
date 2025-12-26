@@ -370,6 +370,27 @@ bool builtin_execute(string cmd1){
 }
 
 
+// FAST VERSION (Uses your global listof_files)
+vector<string> command_generator(string text_str) {
+    vector<string> matches;
+    if(text_str.empty()) return matches;
+
+    for(const string& file : listof_files) {
+        if(file.size() >= text_str.size() && 
+           file.substr(0, text_str.size()) == text_str) {
+            matches.push_back(file);
+        }
+    }
+    return matches;
+}
+
+
+char** custom_completion(const char* text, int start,int end){
+  r1_attempted_completion_over = 1;
+
+  return r1_completion_matches(text, command_generator);
+}
+
 
 
 
@@ -383,7 +404,7 @@ int main() {
   populate_();
   // i had to write the command not found until user doesn't stop
 
-  rl_bind_key('\t', rl_complete);
+  rl_attempted_completion_function = custom_completion
   while(true){
     // cout<<"$ ";
     string cmd1;
