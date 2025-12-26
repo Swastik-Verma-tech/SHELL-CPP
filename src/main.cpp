@@ -273,7 +273,7 @@ bool builtin_execute(string cmd1){
           else if(word=="exit"){
             cout<<"exit is a shell builtin\n";
           }
-          else if(word=="type" || word=="pwd" || word == "cd"){
+          else if(word=="type" || word=="pwd" || word == "cd" || word == "history"){
             cout<<word<<" is a shell builtin\n";
           }
           else{
@@ -414,109 +414,177 @@ int main() {
     
     vector<string> argument=quotes_splitter(cmd1);
     
-    // int idx_ = cmd1.find('|');
-    // if(idx_ != string::npos   && idx_>=1 && (idx_+2)<cmd1.length()){
-    //     string path1_="";
-    //     string path2_="";
-    //     path1_=cmd1.substr(0,idx_);
     
-    //     path2_=cmd1.substr(idx_+1);
+// if(cmd1.find('|') != string::npos){
+        
+//         int children_count = 0;
+//         int idx_ = -1;//cmd1.find('|');
+//         int idx__ = cmd1.find('|');
+//         int next_fd=0;
+//         int fd[2];
+        
+//         while(idx__ != string::npos   && idx__>=1 && (idx__+2)<cmd1.length() ){//&& idx__ != string::npos){
+//             children_count++;
+//             string path1_="";
+//             path1_=cmd1.substr(idx_+1,idx__-idx_-1);
+//             idx_ = idx__;
+//             idx__=cmd1.find('|',idx_+1);
+            
        
-    //     vector<string> args1_=quotes_splitter(path1_);
-    //     vector<char*> args_path1_ = converter(args1_);
+           
+//             vector<string> args1_=quotes_splitter(path1_);
+//             vector<char*> args_path1_ = converter(args1_);
+ 
+            
+//             pipe(fd);
+            
+//             // fd[0] represents the read end of pipe (that is input)
+//             // fd[1] represents the write end of pipe (that is output)
+//             // cout<<fd[0]<<" "<<fd[1];
+//             pid_t c = fork();
+//             if(c<0){
+//                 cout<<"Fork failed\n";
+//             }
+//             else if(c==0){
+//                 // cout<<"Fork done\n";
+//                 if(children_count == 1){
+//                     int saved_out=dup(1);
+//                     dup2(fd[1],1);   // why we are writing the fd[1] as we will be writing to the write end of it
+//                     close(fd[1]);
+//                     close(fd[0]);
+//                     if(path1_ == "exit"){
+//                       dup2(saved_out,1);
+//                       close(saved_out);
+//                     //   break;
+//                     }
+//                     else if(!builtin_execute(path1_)){
+//                       execvp(args_path1_[0],args_path1_.data());
+//                       //this you have to print as a error message
+//                       cout << cmd1 << ": command not found\n";
+//                       exit(1);
+//                     }
+//                     dup2(saved_out,1);
+//                     close(saved_out);
+//                     exit(0);
+                    
+//                 }
+//                 else{
+//                     int saved_out = dup(0);
+//                     int saved_out_ = dup(1);
+                    
+//                     if(next_fd != 0){
+//                         dup2(next_fd,0);  // we have to take the input from next_fd as it is equal to fd[0] of previous one;
+//                         close(next_fd);
+//                     }
+                   
+//                     dup2(fd[1],1);
+//                     close(fd[1]);
+//                     close(fd[0]);
+                    
+//                     if(path1_ == "exit"){
+//                       dup2(saved_out,0);
+//                       dup2(saved_out_,1);
+//                       close(saved_out);
+//                       close(saved_out_);
+//                     //   break;
+//                     }
+//                     else if(!builtin_execute(path1_)){
+//                       execvp(args_path1_[0],args_path1_.data());
+//                       //this you have to print as a error message
+//                       cout << cmd1 << ": command not found\n";
+//                       exit(1);
+//                     }
+//                     dup2(saved_out,0);
+//                     dup2(saved_out_,1);
+//                     close(saved_out_);
+//                     close(saved_out);
+//                     exit(0);
+                    
+//                 }
+//             }
+//             //else wait(NULL);  // we have to run both the forks at the same time so we can't wait for only one program here so we will wait until both the forks are not done that is we will wait at the end of both forks
+//             if(next_fd!=0) close(next_fd);
+//             next_fd = fd[0];
+            
+//             close(fd[1]);
+        
+//         }
+        
+//         //this is I am writing for printing the last time
+//         if(idx_ != string::npos   && idx_>=1 && (idx_+2)<cmd1.length()){
+//             children_count++;
+//             string path2_ = cmd1.substr(idx_+1);
+//             vector<string> args2_=quotes_splitter(path2_);
+//             vector<char*> args_path2_ = converter(args2_);
+            
+            
+//             pid_t c1 = fork();
+            
+//             if(c1<0){
+//                 cout<<"Fork failed\n";
+//             }
+//             else if(c1==0){
+//                 int saved_out=dup(0);
+//                 dup2(next_fd,0);
+//                 close(next_fd);
+//                 close(fd[0]);
+//                 close(fd[1]);
+                
+//                 if(path2_=="exit"){
+//                   dup2(saved_out,0);
+//                   close(saved_out);
+//                   break;
+//                 } 
+//                 else if(!builtin_execute(path2_)){
+//                   execvp(args_path2_[0],args_path2_.data());
+//                   //this you have to print as a error message
+//                   cout << cmd1 << ": command not found\n";
+//                   exit(1);
+//                 }
+//                 dup2(saved_out,0);
+//                 close(saved_out);
+//                 exit(0);    
+//             }
+//         }
+        
+//         if(next_fd != 0) close(next_fd);
+//         close(fd[0]);
+//         close(fd[1]);
 
-    //     vector<string> args2_=quotes_splitter(path2_);
-    //     vector<char*> args_path2_ = converter(args2_);
         
-    //     int fd[2];
-    //     pipe(fd);
         
-    //     // fd[0] represents the read end of pipe (that is input)
-    //     // fd[1] represents the write end of pipe (that is output)
-    //     // cout<<fd[0]<<" "<<fd[1];
-    //     pid_t c = fork();
-    //     if(c<0){
-    //         cout<<"Fork failed\n";
-    //     }
-    //     else if(c==0){
-    //         // cout<<"Fork done\n";
-    //         int saved_out=dup(1);
-    //         dup2(fd[1],1);   // why we are writing the fd[1] as we will be writing to the write end of it
-    //         close(fd[1]);
-    //         close(fd[0]);
-    //         if(path1_ == "exit"){
-    //           dup2(saved_out,1);
-    //           close(saved_out);
-    //           break;
-    //         }
-    //         else if(!builtin_execute(path1_)){
-    //           execvp(args_path1_[0],args_path1_.data());
-    //           //this you have to print as a error message
-    //           cout << cmd1 << ": command not found\n";
-    //           exit(1);
-    //         }
-    //         dup2(saved_out,1);
-    //         close(saved_out);
-    //         exit(0);
-    //     }
-    //     // else wait(NULL);  // we have to run both the forks at the same time so we can't wait for only one program here so we will wait until both the forks are not done that is we will wait at the end of both forks
-        
-    //     pid_t c1 = fork();
-    //     if(c1<0){
-    //         cout<<"Fork failed\n";
-    //     }
-    //     else if(c1==0){
-    //         // cout<<"Fork done\n";
-    //         int saved_out = dup(0);
-    //         dup2(fd[0],0);
-    //         close(fd[0]);
-    //         close(fd[1]);
-    //         if(path2_=="exit"){
-    //           dup2(saved_out,0);
-    //           close(saved_out);
-    //           break;
-    //         } 
-    //         else if(!builtin_execute(path2_)){
-    //           execvp(args_path2_[0],args_path2_.data());
-    //           //this you have to print as a error message
-    //           cout << cmd1 << ": command not found\n";
-    //           exit(1);
-    //         }
-    //         dup2(saved_out,0);
-    //         close(saved_out);
-    //         exit(0);
-    //     }
-    //     // else wait(NULL);   // we have to run both the forks at the same time so we can't wait for only one program here so we will wait until both the forks are not done that is we will wait at the end of both forks
-        
-    //     close(fd[0]);
-    //     close(fd[1]);
-        
-    //     // DO REMEMBER YOU HAVE TO WRITE THE wait(NULL) command 2 times as there above 2 child's processes need to be closed
-    //     wait(NULL);
-    //     wait(NULL); 
-      
-    // }
-
-if(cmd1.find('|') != string::npos){
+//         // DO REMEMBER YOU HAVE TO WRITE THE wait(NULL) command children_count times as there above children_count child's processes need to be closed
+//         for(int i=0;i<children_count;i++){
+//             wait(NULL); 
+//         }
+//     }
+    
+    
+     /*
+     Actually this below code is the more shorter code of above commented out code as when i was using above code so i was feeling that
+     this code can be made more shorter so i have made it
+     And 
+     One more thing that i want to tell you is using above commented code you can figure out that what chanegs i have made and why
+     I have made? so that is why i am leaving above code as commented here.
+     */
+     
+     if(cmd1.find('|') != string::npos){
         
         int children_count = 0;
-        int idx_ = -1;//cmd1.find('|');
+        int idx_ = -1;
         int idx__ = cmd1.find('|');
         int next_fd=0;
         int fd[2];
         
-        while(idx__ != string::npos   && idx__>=1 && (idx__+2)<cmd1.length() ){//&& idx__ != string::npos){
+        while(idx__ != string::npos   && idx__>=1 && (idx__+2)<cmd1.length() ){
             children_count++;
             string path1_="";
             path1_=cmd1.substr(idx_+1,idx__-idx_-1);
             idx_ = idx__;
             idx__=cmd1.find('|',idx_+1);
-            
-       
            
             vector<string> args1_=quotes_splitter(path1_);
             vector<char*> args_path1_ = converter(args1_);
- 
             
             pipe(fd);
             
@@ -527,33 +595,7 @@ if(cmd1.find('|') != string::npos){
             if(c<0){
                 cout<<"Fork failed\n";
             }
-            else if(c==0){
-                // cout<<"Fork done\n";
-                if(children_count == 1){
-                    int saved_out=dup(1);
-                    dup2(fd[1],1);   // why we are writing the fd[1] as we will be writing to the write end of it
-                    close(fd[1]);
-                    close(fd[0]);
-                    if(path1_ == "exit"){
-                      dup2(saved_out,1);
-                      close(saved_out);
-                    //   break;
-                    }
-                    else if(!builtin_execute(path1_)){
-                      execvp(args_path1_[0],args_path1_.data());
-                      //this you have to print as a error message
-                      cout << cmd1 << ": command not found\n";
-                      exit(1);
-                    }
-                    dup2(saved_out,1);
-                    close(saved_out);
-                    exit(0);
-                    
-                }
-                else{
-                    int saved_out = dup(0);
-                    int saved_out_ = dup(1);
-                    
+            else if(c==0){                    
                     if(next_fd != 0){
                         dup2(next_fd,0);  // we have to take the input from next_fd as it is equal to fd[0] of previous one;
                         close(next_fd);
@@ -564,31 +606,20 @@ if(cmd1.find('|') != string::npos){
                     close(fd[0]);
                     
                     if(path1_ == "exit"){
-                      dup2(saved_out,0);
-                      dup2(saved_out_,1);
-                      close(saved_out);
-                      close(saved_out_);
-                    //   break;
+                        exit(0);
                     }
-                    else if(!builtin_execute(path1_)){
-                      execvp(args_path1_[0],args_path1_.data());
-                      //this you have to print as a error message
-                      cout << cmd1 << ": command not found\n";
-                      exit(1);
-                    }
-                    dup2(saved_out,0);
-                    dup2(saved_out_,1);
-                    close(saved_out_);
-                    close(saved_out);
-                    exit(0);
+                    else if(builtin_execute(path1_)) exit(0);
                     
-                }
+                    execvp(args_path1_[0],args_path1_.data());
+                    //this you have to print as a error message
+                    cout << cmd1 << ": command not found\n";
+                    exit(1);
             }
             //else wait(NULL);  // we have to run both the forks at the same time so we can't wait for only one program here so we will wait until both the forks are not done that is we will wait at the end of both forks
             if(next_fd!=0) close(next_fd);
             next_fd = fd[0];
             
-            close(fd[1]);
+            close(fd[1]);  //this we are closing of parents process and we didn't close fd[0] as we have to pass it to next runner as next_fd so please remember it
         
         }
         
@@ -606,44 +637,29 @@ if(cmd1.find('|') != string::npos){
                 cout<<"Fork failed\n";
             }
             else if(c1==0){
-                int saved_out=dup(0);
-                dup2(next_fd,0);
-                close(next_fd);
-                close(fd[0]);
-                close(fd[1]);
-                
-                if(path2_=="exit"){
-                  dup2(saved_out,0);
-                  close(saved_out);
-                  break;
-                } 
-                else if(!builtin_execute(path2_)){
-                  execvp(args_path2_[0],args_path2_.data());
-                  //this you have to print as a error message
-                  cout << cmd1 << ": command not found\n";
-                  exit(1);
+                if(next_fd != 0){
+                   dup2(next_fd,0);
+                   close(next_fd);
                 }
-                dup2(saved_out,0);
-                close(saved_out);
-                exit(0);    
+                
+                if(path2_=="exit") exit(0);
+                
+                else if(builtin_execute(path2_)) exit(0);
+                
+                execvp(args_path2_[0],args_path2_.data());
+                //this you have to print as a error message
+                cout << cmd1 << ": command not found\n";
+                exit(1);
             }
         }
         
         if(next_fd != 0) close(next_fd);
-        close(fd[0]);
-        close(fd[1]);
-
-        
         
         // DO REMEMBER YOU HAVE TO WRITE THE wait(NULL) command children_count times as there above children_count child's processes need to be closed
         for(int i=0;i<children_count;i++){
             wait(NULL); 
         }
-    }
-    
-    
-    
-    
+      }
 
 
 
