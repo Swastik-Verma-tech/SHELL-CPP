@@ -388,7 +388,7 @@ vector<string> command_generator(string text_str) {
 char** custom_completion(const char* text, int start,int end){
   rl_attempted_completion_over = 1;
 
-  return rl_completion_matches(text, command_generator);
+  return rl_completion_matches(text, converter(command_generator));
 }
 
 
