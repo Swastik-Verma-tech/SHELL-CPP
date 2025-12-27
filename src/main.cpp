@@ -360,10 +360,28 @@ bool builtin_execute(string cmd1){
     else if(word == "history"){
       ss>>word;
       int temp_idx=History_tracker.size();
-      if(word!="history") temp_idx=stoi(word);
-      if(temp_idx<=0) return true;
-      for(int i=(History_tracker.size()-temp_idx+1);i<=History_tracker.size();i++){
-        cout<<i<<" "<<History_tracker[i-1]<<"\n";
+      
+      if(word=="-r"){
+          //
+          ss>>word;
+          string file_name_=word;
+          ifstream file(file_name_);
+          if(!file.is_open()){
+              cout<<"Error: This file doesn't exist\n";
+          }
+          else{
+              string each_line;
+              while(getline(file,each_line)){
+                  History_tracker.push_back(each_line);
+              }
+          }
+      }
+      else{
+          if(word!="history") temp_idx=stoi(word);
+          if(temp_idx<=0) return true;
+          for(int i=(History_tracker.size()-temp_idx+1);i<=History_tracker.size();i++){
+            cout<<i<<" "<<History_tracker[i-1]<<"\n";
+          }
       }
       return true;
     }
@@ -427,15 +445,21 @@ int main() {
 
   populate_();
   // i had to write the command not found until user doesn't stop
-  // rl_bind_key('\t',rl_complete);
-  rl_attempted_completion_function = my_autocompletion;
+  
+  rl_attempted_completion_function = my_autocompletion;  // it is related to the readline() functionality
+  
   while(true){
     // cout<<"$ ";
     string cmd1;
     
+    /*
+    Actually i don't need to use these anymore and also not read_input function as now instead of them i am using readline() function and
+    it is able to do everything for me that before read_input function is doing and also it is able to execute the up and down arrow key
+    implementation also.
     // enableRawMode();
     // cmd1 = read_input(); 
     // disableRawMode();
+    */
 
     char* unmodified_cmd=readline("$ ");
     
@@ -452,9 +476,9 @@ int main() {
     int saved_stdout=-1;
     bool redirection_active=false;
     int temp_fd;
-    // stringstream ss(cmd1);
-    // string word;
-    // ss>>word;
+    stringstream ss(cmd1);
+    string word;
+    ss>>word;
     
     
     
@@ -744,7 +768,7 @@ int main() {
 
 
 
-    else if(cmd1=="exit"){
+    else if(word=="exit"){
       History_tracker.clear();
       break;
     }
