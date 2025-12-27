@@ -387,7 +387,7 @@ bool builtin_execute(string cmd1){
         for(auto v:History_tracker){
           file<<v<<"\n";
         }
-        file<<"\n";
+        // file<<"\n";
       }
       else{
           if(word!="history") temp_idx=stoi(word);
