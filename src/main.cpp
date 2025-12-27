@@ -8,6 +8,8 @@
 # include<termios.h>
 # include<readline/readline.h>
 # include<readline/history.h>
+//run this file with this exact command in the terminal (stated below) as readline ke liye ese hi proceed krna pdega
+// g++ main.cpp -o myshell -lreadline
 
 struct termios information;
 
@@ -370,6 +372,50 @@ bool builtin_execute(string cmd1){
 }
 
 
+vector<string> command_generator(string temp){
+      vector<string> all_executables;        
+      if(temp!=""){
+          all_executables.clear();
+          for(auto v:listof_files){
+              string t="";
+              if(temp.size() <= v.size()) t=v.substr(0,temp.size());
+              if(t==temp){
+                  all_executables.push_back(v);
+              }
+          }
+      } 
+      return all_executables;
+}
+
+char* command_generator_wrapper(const char* text, int state){
+  static vector<string> matches;
+  static size_t match_index = 0;
+
+  if(state == 0){
+    matches = command_generator(string(text));
+    match_index = 0;
+  }
+
+  if(match_index < matches.size()){
+    char* result = strdup(matches[match_inndex].c_str());
+    match_index++;
+    return result;
+  }
+
+  return nullptr;
+}
+
+
+
+
+char** my_autocompletion(const char* text, int start, int end){
+  if(start == 0){
+    return rl_completion_matches(text, command_generator_wrapper);
+  }
+  return nullptr;
+}
+
+
 
 
 
@@ -382,6 +428,8 @@ int main() {
 
   populate_();
   // i had to write the command not found until user doesn't stop
+  // rl_bind_key('\t',rl_complete);
+  rl_attempted_completion_function = my_autocompletion
   while(true){
     // cout<<"$ ";
     string cmd1;
