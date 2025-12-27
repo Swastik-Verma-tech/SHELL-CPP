@@ -375,7 +375,6 @@ bool builtin_execute(string cmd1){
 vector<string> command_generator(string temp){
       vector<string> all_executables;        
       if(temp!=""){
-          all_executables.clear();
           for(auto v:listof_files){
               string t="";
               if(temp.size() <= v.size()) t=v.substr(0,temp.size());
@@ -397,7 +396,7 @@ char* command_generator_wrapper(const char* text, int state){
   }
 
   if(match_index < matches.size()){
-    char* result = strdup(matches[match_inndex].c_str());
+    char* result = strdup(matches[match_index].c_str());
     match_index++;
     return result;
   }
