@@ -370,27 +370,6 @@ bool builtin_execute(string cmd1){
 }
 
 
-// FAST VERSION (Uses your global listof_files)
-vector<string> command_generator(string text_str) {
-    vector<string> matches;
-    if(text_str.empty()) return matches;
-
-    for(const string& file : listof_files) {
-        if(file.size() >= text_str.size() && 
-           file.substr(0, text_str.size()) == text_str) {
-            matches.push_back(file);
-        }
-    }
-    return matches;
-}
-
-
-char** custom_completion(const char* text, int start,int end){
-  rl_attempted_completion_over = 1;
-
-  return rl_completion_matches(text, converter(command_generator));
-}
-
 
 
 
@@ -403,10 +382,8 @@ int main() {
 
   populate_();
   // i had to write the command not found until user doesn't stop
-
-  rl_attempted_completion_function = custom_completion;
   while(true){
-    // cout<<"$ ";
+    cout<<"$ ";
     string cmd1;
     
     // enableRawMode();
@@ -415,14 +392,14 @@ int main() {
 
     char* unmodified_cmd=readline("$ ");
     
-    // it is implementing the ctrl+D command of shell
     if(!unmodified_cmd) break;
-    cmd1=string(unmodified_cmd);
     
     if(cmd1.length() > 0) add_history(unmodified_cmd);
+    
+    cmd1=string(unmodified_cmd);
     free(unmodified_cmd);
 
-    if(cmd1.length() > 0) History_tracker.push_back(cmd1);
+    History_tracker.push_back(cmd1);
     // getline(cin,cmd1);
     string file_name;
     int saved_stdout=-1;
