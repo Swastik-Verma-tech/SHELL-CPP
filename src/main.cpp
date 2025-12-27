@@ -804,6 +804,11 @@ int main() {
 
 
     else if(word=="exit"){
+      if(path_ != nullptr){
+        if(fs::exists(path_)){
+          builtin_execute("history -w "+string(path_));
+        }
+      }
       History_tracker.clear();
       break;
     }
