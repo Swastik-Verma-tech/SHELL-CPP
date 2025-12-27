@@ -383,7 +383,7 @@ int main() {
   populate_();
   // i had to write the command not found until user doesn't stop
   while(true){
-    cout<<"$ ";
+    // cout<<"$ ";
     string cmd1;
     
     // enableRawMode();
