@@ -476,9 +476,11 @@ int main() {
   
   rl_attempted_completion_function = my_autocompletion;  // it is related to the readline() functionality
   
-  string path = getenv("HISTFILE");
-  if(fs::exists(path)){
-    builtin_execute("history -r "+path);
+  const char* path_ = getenv("HISTFILE");
+  if(path_ != nullptr){
+    if(fs::exists(path_)){
+      builtin_execute("history -r "+string(path_));
+    }
   }
 
   while(true){
