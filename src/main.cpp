@@ -33,6 +33,7 @@ namespace fs = filesystem;
 
 // string output_final="";
 vector<string> History_tracker;
+int append_counter=0;
 
 vector<string> quotes_splitter(string &str){
     vector<string> final;
@@ -376,6 +377,7 @@ bool builtin_execute(string cmd1){
           }         
       }
       else if(word == "-w"){
+        append_counter=History_tracker.size();
         ss>>word;
         string file_name_=word;
         ofstream file(file_name_);    // it creates the file if it doesn't exist or it overwrites if it exists
@@ -387,7 +389,20 @@ bool builtin_execute(string cmd1){
         for(auto v:History_tracker){
           file<<v<<"\n";
         }
-        // file<<"\n";
+      }
+      else if(word == "-a"){
+        ss>>word;
+        string file_name_=word;
+        ofstream file(file_name_,ios::app);   // opening the file in append mode
+
+        if(!file.is_open()){
+          cout<<"Error: This file doesn't exist\n";
+          return false;
+        }
+        for(int i=append_counter;i<History_tracker.size();i++){
+          file<<History_tracker[i]<<"\n";
+        }
+        append_counter=History_tracker.size();
       }
       else{
           if(word!="history") temp_idx=stoi(word);
