@@ -368,13 +368,26 @@ bool builtin_execute(string cmd1){
           ifstream file(file_name_);
           if(!file.is_open()){
               cout<<"Error: This file doesn't exist\n";
+              return false;
           }
-          else{
-              string each_line;
-              while(getline(file,each_line)){
-                  History_tracker.push_back(each_line);
-              }
-          }
+          string each_line;
+          while(getline(file,each_line)){
+              History_tracker.push_back(each_line);
+          }         
+      }
+      else if(word == "-w"){
+        ss>>word;
+        string file_name_=word;
+        ofstream file(file_name_);    // it creates the file if it doesn't exist or it overwrites if it exists
+        
+        if(!file.is_open()){
+          cout<<"Error: This file doesn't exist\n";
+          return false;
+        }
+        for(auto v:History_tracker){
+          file<<v<<"\n";
+        }
+        file<<"\n";
       }
       else{
           if(word!="history") temp_idx=stoi(word);
